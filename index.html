@@ -9,7 +9,7 @@
       #picksTable {
         font-size: 8pt;
         table-layout: fixed;
-        width: 2250px;
+        width: 1900px;
       }
 
       #picksTable th {
@@ -17,6 +17,7 @@
       }
 
       .record {
+        width: 60px;
         font-size: 10pt;
         font-weight: bold;
         padding: 7px 5px !important;
@@ -35,6 +36,7 @@
       }
 
       .team-name {
+        width: 125px;
         text-align: left !important;
         font-size: 10pt;
         font-weight: bold;
@@ -78,27 +80,27 @@
       <table class="table table-bordered border-black" id="picksTable">
         <thead>
           <tr>
-            <th></th>
+            <th class="team-name"></th>
             <th class="team-stripe"></th>
-            <th>Week 0</th>
-            <th>Week 1</th>
-            <th>Week 2</th>
-            <th>Week 3</th>
-            <th>Week 4</th>
-            <th>Week 5</th>
-            <th>Week 6</th>
-            <th>Week 7</th>
-            <th>Week 8</th>
-            <th>Week 9</th>
-            <th>Week 10</th>
-            <th>Week 11</th>
-            <th>Week 12</th>
-            <th>Week 13</th>
-            <th>Week 14</th>
-            <th>Overall</th>
-            <th>Conference</th>
+            <th class="pick">Week 0</th>
+            <th class="pick">Week 1</th>
+            <th class="pick">Week 2</th>
+            <th class="pick">Week 3</th>
+            <th class="pick">Week 4</th>
+            <th class="pick">Week 5</th>
+            <th class="pick">Week 6</th>
+            <th class="pick">Week 7</th>
+            <th class="pick">Week 8</th>
+            <th class="pick">Week 9</th>
+            <th class="pick">Week 10</th>
+            <th class="pick">Week 11</th>
+            <th class="pick">Week 12</th>
+            <th class="pick">Week 13</th>
+            <th class="pick">Week 14</th>
+            <th class="record overall">Overall</th>
+            <th class="record conference">Big XII</th>
             <th class="team-stripe"></th>
-            <th></th>
+            <th class="team-name right"></th>
           </tr>
         </thead>
         <tbody>
@@ -402,7 +404,7 @@
           "colors": ["#CC0000", "#000000", "#FFFFFF"],
           "picks": {
             "w00": null,
-            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Arkansas Pine-Bluff"},
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Arkansas P-B"},
             "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Kent St."},
             "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Oregon St."},
             "w04": {"pick": null,  "nc": false, "pre": "at",       "team": "Utah"},
