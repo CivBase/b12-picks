@@ -506,7 +506,7 @@
       var download = () => {
         var node = document.getElementById('picksTable');
 
-        htmlToImage.toPng(node)
+        htmlToImage.toPng(node, {width: 2250, height: 598})
           .then((url) => {
             const link = document.createElement('a');
             link.download = 'picks.png';
