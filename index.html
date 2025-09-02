@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Big XII Picks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <style>
+      #picksTable {
+        font-size: 8pt;
+        table-layout: fixed;
+        width: 2250px;
+      }
+
+      #picksTable th {
+        font-size: 10pt;
+      }
+
+      .record {
+        font-size: 10pt;
+        font-weight: bold;
+        padding: 7px 5px !important;
+      }
+
+      #picksTable td {
+        text-align: center;
+        border: 1px solid #000000;
+        padding: 1px;
+      }
+
+      #picksTable th {
+        text-align: center;
+        background-color: #000000;
+        color: #FFFFFF;
+      }
+
+      .team-name {
+        text-align: left !important;
+        font-size: 10pt;
+        font-weight: bold;
+        border-right: none;
+        padding: 7px 5px !important;
+      }
+
+      .team-name.right {
+        text-align: right !important;
+        font-weight: bold;
+        border-left: none;
+        border-right: 1px solid #000000;
+      }
+
+      .team-stripe {
+        padding: 0 !important;
+        width: 4px;
+        border: none;
+      }
+
+      .pick.no-pick {
+        background: #EEEEEE;
+      }
+
+      .pick.toggle.table-success,
+      .pick.toggle.table-danger,
+      .pick.toggle.no-pick {
+        cursor: pointer;
+      }
+
+      .pick.toggle.table-success:hover,
+      .pick.toggle.table-danger:hover,
+      .pick.toggle.no-pick:hover {
+        font-weight: bold;
+        filter: brightness(90%);
+      }
+    </style>
+  </head>
+  <body>
+    <div style="padding: 10px;">
+      <table class="table table-bordered border-black" id="picksTable">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="team-stripe"></th>
+            <th>Week 0</th>
+            <th>Week 1</th>
+            <th>Week 2</th>
+            <th>Week 3</th>
+            <th>Week 4</th>
+            <th>Week 5</th>
+            <th>Week 6</th>
+            <th>Week 7</th>
+            <th>Week 8</th>
+            <th>Week 9</th>
+            <th>Week 10</th>
+            <th>Week 11</th>
+            <th>Week 12</th>
+            <th>Week 13</th>
+            <th>Week 14</th>
+            <th>Overall</th>
+            <th>Conference</th>
+            <th class="team-stripe"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <button class="btn btn-primary" onclick="download()">Download</button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js"></script>
+    <script>
+      const PICKS = {
+        "Arizona": {
+          "name": "Arizona",
+          "id": "arizona",
+          "colors": ["#CC0033", "#003366", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Hawaii"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Webber St."},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Kansas St."},
+            "w04": null,
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "Iowa St."},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "OSU"},
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "BYU"},
+            "w08": {"pick": null,  "nc": false, "pre": "at",       "team": "Houston"},
+            "w09": null,
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Colorado"},
+            "w11": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas"},
+            "w12": {"pick": null,  "nc": false, "pre": "at",       "team": "Cincinnati"},
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "Baylor"},
+            "w14": {"pick": null,  "nc": false, "pre": "🌵 at",    "team": "Arizona St."}
+          }
+        },
+        "Arizona St.": {
+          "name": "Arizona State",
+          "id": "arizona-st",
+          "colors": ["#8C1D40", "#FFC627", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "N. Arizona"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Mississippi St."},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Texas St."},
+            "w04": {"pick": null,  "nc": false, "pre": "at",       "team": "Baylor"},
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "TCU"},
+            "w06": null,
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Utah"},
+            "w08": {"pick": null,  "nc": false, "pre": "vs",       "team": "Texas Tech"},
+            "w09": {"pick": null,  "nc": false, "pre": "vs",       "team": "Houston"},
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Iowa St."},
+            "w11": null,
+            "w12": {"pick": null,  "nc": false, "pre": "vs",       "team": "West Virginia"},
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "Colorado"},
+            "w14": {"pick": null,  "nc": false, "pre": "🌵 vs",    "team": "Arizona"}
+          }
+        },
+        "Baylor": {
+          "name": "Baylor",
+          "id": "baylor",
+          "colors": ["#154734", "#FFB81C", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": false, "nc": true,  "pre": "NC vs",    "team": "Auburn"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "SMU"},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Samford"},
+            "w04": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona St."},
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "Oklahoma St."},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas St."},
+            "w07": null,
+            "w08": {"pick": null,  "nc": false, "pre": "⛪ at",    "team": "TCU"},
+            "w09": {"pick": null,  "nc": false, "pre": "at",       "team": "Cincinnati"},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "UCF"},
+            "w11": null,
+            "w12": {"pick": null,  "nc": false, "pre": "vs",       "team": "Utah"},
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona"},
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "Houston"}
+          }
+        },
+        "BYU": {
+          "name": "BYU",
+          "id": "byu",
+          "colors": ["#002E5D", "#0062B8", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Portland St."},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Stanford"},
+            "w03": null,
+            "w04": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "E. Carolina"},
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "Colorado"},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "West Virginia"},
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona"},
+            "w08": {"pick": null,  "nc": false, "pre": "🙏 vs",    "team": "Utah"},
+            "w09": {"pick": null,  "nc": false, "pre": "at",       "team": "Iowa St."},
+            "w10": null,
+            "w11": {"pick": null,  "nc": false, "pre": "at",       "team": "Texas Tech"},
+            "w12": {"pick": null,  "nc": false, "pre": "vs",       "team": "TCU"},
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "Cincinnati"},
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "UCF"}
+          }
+        },
+        "UCF": {
+          "name": "UCF",
+          "id": "ucf",
+          "colors": ["#BA9b37", "#000000", "#000000"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Jacksonville St."},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "N. Carolina A&T"},
+            "w03": null,
+            "w04": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "UNC"},
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas St."},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas"},
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Cincinnati"},
+            "w08": {"pick": null,  "nc": false, "pre": "vs",       "team": "West Virginia"},
+            "w09": null,
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Baylor"},
+            "w11": {"pick": null,  "nc": false, "pre": "vs",       "team": "Houston"},
+            "w12": {"pick": null,  "nc": false, "pre": "at",       "team": "Texas Tech"},
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "Oklahoma St."},
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "BYU"}
+          }
+        },
+        "Cincinnati": {
+          "name": "Cincinnati",
+          "id": "cincinnati",
+          "colors": ["#E00122", "#000000", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": false, "nc": true,  "pre": "NC at*",   "team": "Nebraska"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Bowling Green"},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Northwestern St."},
+            "w04": null,
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas"},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "Iowa St."},
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "UCF"},
+            "w08": {"pick": null,  "nc": false, "pre": "at",       "team": "Oklahoma St."},
+            "w09": {"pick": null,  "nc": false, "pre": "vs",       "team": "Baylor"},
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Utah"},
+            "w11": null,
+            "w12": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona"},
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "BYU"},
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "TCU"}
+          }
+        },
+        "Colorado": {
+          "name": "Colorado",
+          "id": "colorado",
+          "colors": ["#CFB87C", "#000000", "#000000"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": false, "nc": true,  "pre": "NC vs",    "team": "Georgia Tech"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Delaware"},
+            "w03": {"pick": null,  "nc": false, "pre": "at",       "team": "Houston"},
+            "w04": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Wyoming"},
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "BYU"},
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "TCU"},
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "Iowa St."},
+            "w08": null,
+            "w09": {"pick": null,  "nc": false, "pre": "at",       "team": "Utah"},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona"},
+            "w11": {"pick": null,  "nc": false, "pre": "at",       "team": "West Virginia"},
+            "w12": null,
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona St."},
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas St."}
+          }
+        },
+        "Houston": {
+          "name": "Houston",
+          "id": "houston",
+          "colors": ["#C8102E", "#76232F", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Stephen F. Austin"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Rice"},
+            "w03": {"pick": null,  "nc": false, "pre": "vs",       "team": "Colorado"},
+            "w04": null,
+            "w05": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Oregon St."},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "Texas Tech"},
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Oklahoma St."},
+            "w08": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona"},
+            "w09": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona St."},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "West Virginia"},
+            "w11": {"pick": null,  "nc": false, "pre": "at",       "team": "UCF"},
+            "w12": null,
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "TCU"},
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "Baylor"}
+          }
+        },
+        "Iowa St.": {
+          "name": "Iowa State",
+          "id": "iowa-st",
+          "colors": ["#C8102E", "#F1BE48", "#FFFFFF"],
+          "picks": {
+            "w00": {"pick": true,  "nc": false, "pre": "🍀 at*",   "team": "Kansas St."},
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "S. Dakota"},
+            "w02": {"pick": null,  "nc": true,  "pre": "🌽 NC vs", "team": "Iowa"},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Arkansas St."},
+            "w04": null,
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona"},
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "Cincinnati"},
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Colorado"},
+            "w08": null,
+            "w09": {"pick": null,  "nc": false, "pre": "vs",       "team": "BYU"},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona St."},
+            "w11": {"pick": null,  "nc": false, "pre": "at",       "team": "TCU"},
+            "w12": null,
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas"},
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "Oklahoma St."}
+          }
+        },
+        "Kansas": {
+          "name": "Kansas",
+          "id": "kansas",
+          "colors": ["#0051BA", "#E8000D", "#FFFFFF"],
+          "picks": {
+            "w00": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Fresno St."},
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Wagner"},
+            "w02": {"pick": null,  "nc": true,  "pre": "🪖 NC at", "team": "Missouri"},
+            "w03": null,
+            "w04": {"pick": null,  "nc": false, "pre": "vs",       "team": "West Virginia"},
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "Cincinnati"},
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "UCF"},
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Texas Tech"},
+            "w08": null,
+            "w09": {"pick": null,  "nc": false, "pre": "🌻 vs",    "team": "Kansas St."},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "Oklahoma St."},
+            "w11": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona"},
+            "w12": null,
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "Iowa St."},
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "Utah"}
+          }
+        },
+        "Kansas St.": {
+          "name": "Kansas State",
+          "id": "kansas-st",
+          "colors": ["#512888", "#D1D1D1", "#FFFFFF"],
+          "picks": {
+            "w00": {"pick": false, "nc": false, "pre": "🍀 vs*",   "team": "Iowa St."},
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "N. Dakota"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Army"},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Arizona"},
+            "w04": null,
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "UCF"},
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "Baylor"},
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "TCU"},
+            "w08": null,
+            "w09": {"pick": null,  "nc": false, "pre": "🌻 at",    "team": "Kansas"},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "Texas Tech"},
+            "w11": null,
+            "w12": {"pick": null,  "nc": false, "pre": "at",       "team": "Oklahoma St."},
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "Utah"},
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "Colorado"}
+          }
+        },
+        "Oklahoma St.": {
+          "name": "Oklahoma State",
+          "id": "oklahoma-st",
+          "colors": ["#FF7300", "#000000", "#000000"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "UT-Martin"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Oregon"},
+            "w03": null,
+            "w04": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Tulsa"},
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "Baylor"},
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona"},
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "Houston"},
+            "w08": {"pick": null,  "nc": false, "pre": "vs",       "team": "Cincinnati"},
+            "w09": {"pick": null,  "nc": false, "pre": "at",       "team": "Texas Tech"},
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas"},
+            "w11": null,
+            "w12": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas St."},
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "UCF"},
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "Iowa St."}
+          }
+        },
+        "TCU": {
+          "name": "TCU",
+          "id": "tcu",
+          "colors": ["#4D1979", "#A3A9AC", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC at",    "team": "UNC"},
+            "w02": null,
+            "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Abilene Christian"},
+            "w04": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "SMU"},
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona St."},
+            "w06": {"pick": null,  "nc": false, "pre": "vs",       "team": "Colorado"},
+            "w07": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas St."},
+            "w08": {"pick": null,  "nc": false, "pre": "⛪ vs",    "team": "Baylor"},
+            "w09": {"pick": null,  "nc": false, "pre": "at",       "team": "West Virginia"},
+            "w10": null,
+            "w11": {"pick": null,  "nc": false, "pre": "vs",       "team": "Iowa St."},
+            "w12": {"pick": null,  "nc": false, "pre": "at",       "team": "BYU"},
+            "w13": {"pick": null,  "nc": false, "pre": "at",       "team": "Houston"},
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "Cincinnati"}
+          }
+        },
+        "Texas Tech": {
+          "name": "Texas Tech",
+          "id": "texas-tech",
+          "colors": ["#CC0000", "#000000", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Arkansas Pine-Bluff"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Kent St."},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Oregon St."},
+            "w04": {"pick": null,  "nc": false, "pre": "at",       "team": "Utah"},
+            "w05": null,
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "Houston"},
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas"},
+            "w08": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona St."},
+            "w09": {"pick": null,  "nc": false, "pre": "vs",       "team": "Oklahoma St."},
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas St."},
+            "w11": {"pick": null,  "nc": false, "pre": "vs",       "team": "BYU"},
+            "w12": {"pick": null,  "nc": false, "pre": "vs",       "team": "UCF"},
+            "w13": null,
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "West Virginia"}
+          }
+        },
+        "Utah": {
+          "name": "Utah",
+          "id": "utah",
+          "colors": ["#CC0000", "#808080", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC at",    "team": "UCLA"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC vs",    "team": "Cal Poly"},
+            "w03": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Wyoming"},
+            "w04": {"pick": null,  "nc": false, "pre": "vs",       "team": "Texas Tech"},
+            "w05": {"pick": null,  "nc": false, "pre": "at",       "team": "West Virginia"},
+            "w06": null,
+            "w07": {"pick": null,  "nc": false, "pre": "vs",       "team": "Arizona St."},
+            "w08": {"pick": null,  "nc": false, "pre": "🙏 at",    "team": "BYU"},
+            "w09": {"pick": null,  "nc": false, "pre": "vs",       "team": "Colorado"},
+            "w10": {"pick": null,  "nc": false, "pre": "vs",       "team": "Cincinnati"},
+            "w11": null,
+            "w12": {"pick": null,  "nc": false, "pre": "at",       "team": "Baylor"},
+            "w13": {"pick": null,  "nc": false, "pre": "vs",       "team": "Kansas St."},
+            "w14": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas"}
+          }
+        },
+        "West Virginia": {
+          "name": "West Virginia",
+          "id": "west-virginia",
+          "colors": ["#002855", "#EAAA00", "#FFFFFF"],
+          "picks": {
+            "w00": null,
+            "w01": {"pick": true,  "nc": true,  "pre": "NC vs",    "team": "Robert Morris"},
+            "w02": {"pick": null,  "nc": true,  "pre": "NC at",    "team": "Ohio"},
+            "w03": {"pick": null,  "nc": true,  "pre": "💩 NC vs", "team": "Pitt"},
+            "w04": {"pick": null,  "nc": false, "pre": "at",       "team": "Kansas"},
+            "w05": {"pick": null,  "nc": false, "pre": "vs",       "team": "Utah"},
+            "w06": {"pick": null,  "nc": false, "pre": "at",       "team": "BYU"},
+            "w07": null,
+            "w08": {"pick": null,  "nc": false, "pre": "at",       "team": "UCF"},
+            "w09": {"pick": null,  "nc": false, "pre": "vs",       "team": "TCU"},
+            "w10": {"pick": null,  "nc": false, "pre": "at",       "team": "Houston"},
+            "w11": {"pick": null,  "nc": false, "pre": "vs",       "team": "Colorado"},
+            "w12": {"pick": null,  "nc": false, "pre": "at",       "team": "Arizona St."},
+            "w13": null,
+            "w14": {"pick": null,  "nc": false, "pre": "vs",       "team": "Texas Tech"}
+          } 
+        }
+      };
+
+      const ORDER = [
+        "Arizona",
+        "Arizona St.",
+        "Baylor",
+        "BYU",
+        "UCF",
+        "Cincinnati",
+        "Colorado",
+        "Houston",
+        "Iowa St.",
+        "Kansas",
+        "Kansas St.",
+        "Oklahoma St.",
+        "TCU",
+        "Texas Tech",
+        "Utah",
+        "West Virginia"
+      ];
+
+      const WEEKS = [
+        "w00",
+        "w01",
+        "w02",
+        "w03",
+        "w04",
+        "w05",
+        "w06",
+        "w07",
+        "w08",
+        "w09",
+        "w10",
+        "w11",
+        "w12",
+        "w13",
+        "w14"
+      ];
+
+      var download = () => {
+        var node = document.getElementById('picksTable');
+
+        htmlToImage.toPng(node)
+          .then((url) => {
+            const link = document.createElement('a');
+            link.download = 'picks.png';
+            link.href = url;
+            link.click();
+            link.remove();
+          }).catch((error) => {
+            window.alert(error);
+          });
+      };
+
+      var setPick = (teamName, wk, to) => {
+        const team = PICKS[teamName];
+        if (team === undefined) {
+          return;
+        }
+
+        if (to === null) {
+          pick = !team.picks[wk].pick;
+        } else {
+          pick = to;
+        }
+
+        team.picks[wk].pick = pick;
+        const teamRow = document.getElementById(team.id);
+        const gameCell = teamRow.getElementsByClassName(wk)[0];
+        gameCell.classList.remove('table-success');
+        gameCell.classList.remove('table-danger');
+        gameCell.classList.remove('no-pick');
+        gameCell.classList.add(pick ? 'table-success' : 'table-danger');
+
+        calcRecords(teamName);
+
+        if (to !== null) {
+          return;
+        }
+
+        setPick(team.picks[wk].team, wk, !pick);
+      };
+
+      var calcRecords = (teamName) => {
+        const team = PICKS[teamName];
+        const teamRow = document.getElementById(team.id);
+        const overallCell = teamRow.getElementsByClassName('overall')[0];
+        const confCell = teamRow.getElementsByClassName('conference')[0];
+
+        let overallWins = 0;
+        let confWins = 0;
+        WEEKS.every((wk) => {
+          const game = team.picks[wk];
+          if (game === null) {
+            return true;
+          }
+
+          if (game.pick) {
+            overallWins += 1;
+            if (!game.nc) {
+              confWins += 1;
+            }
+          }
+
+          overallCell.innerHTML = `${overallWins}-${12-overallWins}`;
+          confCell.innerHTML = `${confWins}-${9-confWins}`;
+
+          return true;
+        });
+      };
+
+      window.onload = () => {
+        const table = document.getElementById('picksTable');
+        const tableBody = table.getElementsByTagName('tbody')[0];
+        ORDER.every((teamName) => {
+          const team = PICKS[teamName];
+          const nameStyle = `background-color: ${team.colors[0]}; color: ${team.colors[2]};`;
+          const stripeStyle = `background-color: ${team.colors[1]};`;
+
+          let weekCells = '';
+          WEEKS.every((wk) => {
+            const game = team.picks[wk];
+            if (game === null) {
+              weekCells += `<td class="pick ${wk}"></td>`;
+              return true;
+            }
+
+            let weekClass = '';
+            let weekOnclick = '';
+            if (game.pick === true) {
+              weekClass = 'table-success';
+            } else if (game.pick === false) {
+              weekClass = 'table-danger';
+            } else {
+              weekClass = 'no-pick';
+              weekOnclick = `onclick="setPick('${teamName}', '${wk}', null)"`;
+            }
+
+            if (wk !== 'w00' && wk !== 'w01') {
+              weekClass += ' toggle';
+            }
+
+            weekCells += `
+              <td class="pick ${wk} ${weekClass}" ${weekOnclick}>
+                ${game.pre}
+                <br/>
+                ${game.team}
+              </td>`;
+            return true;
+          });
+
+          tableBody.innerHTML += `
+            <tr id="${team.id}" class="picks">
+              <td class="team-name" style="${nameStyle}">${team.name}</td>
+              <td class="team-stripe" style="${stripeStyle}"></td>${weekCells}
+              <td class="record overall"></td>
+              <td class="record conference"></td>
+              <td class="team-stripe" style="${stripeStyle}"></td>
+              <td class="team-name right" style="${nameStyle}">${team.name}</td>
+            </tr>`;
+
+          calcRecords(teamName);
+          return true;
+        });
+      };
+    </script>
+  </body>
+</html>
